@@ -1,0 +1,23 @@
+{
+  "_说明": "复制本文件为 api_config.json 后再填写。api_config.json 已被 .gitignore 排除，不会提交到仓库。",
+
+  "base_url": "https://api.openai.com/v1",
+  "api_key": "sk-your-key-here",
+  "model": "gpt-image-1",
+
+  "type": "auto",
+  "size": "1024x1024",
+  "quality": "high",
+
+  "_supported_sizes": "留空则按模型自动判断；想强制指定就填尺寸列表，例如 [\"1024x1024\",\"1536x1024\"]",
+  "supported_sizes": [],
+
+  "timeout": 300,
+  "retry": 2,
+
+  "_extra_headers": "有的中转站需要额外请求头，例如 {\"X-Api-Version\":\"1\"}",
+  "extra_headers": {},
+
+  "_extra_body": "需要往请求体里加参数时用，例如 {\"seed\":42,\"style\":\"vivid\"}",
+  "extra_body": {}
+}
