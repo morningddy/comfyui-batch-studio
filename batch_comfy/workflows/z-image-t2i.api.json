@@ -1,0 +1,66 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "_meta": { "title": "UNet加载" },
+    "inputs": { "unet_name": "z_image_turbo_bf16.safetensors", "weight_dtype": "fp8_e4m3fn_fast" }
+  },
+  "4": {
+    "class_type": "CLIPLoader",
+    "_meta": { "title": "CLIP加载" },
+    "inputs": { "clip_name": "qwen_3_4b.safetensors", "type": "lumina2", "device": "default" }
+  },
+  "7": {
+    "class_type": "VAELoader",
+    "_meta": { "title": "VAE加载" },
+    "inputs": { "vae_name": "ae.safetensors" }
+  },
+  "3": {
+    "class_type": "ModelSamplingAuraFlow",
+    "_meta": { "title": "采样偏移" },
+    "inputs": { "model": ["1", 0], "shift": 3.0 }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "_meta": { "title": "正向提示词" },
+    "inputs": { "clip": ["4", 0], "text": "一只柴犬坐在咖啡馆窗边，午后暖光，胶片质感" }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "_meta": { "title": "反向提示词" },
+    "inputs": {
+      "clip": ["4", 0],
+      "text": "泛黄，发绿，模糊，低分辨率，低质量图像，扭曲的肢体，水印，乱码，JPEG压缩条纹"
+    }
+  },
+  "11": {
+    "class_type": "EmptySD3LatentImage",
+    "_meta": { "title": "空Latent" },
+    "inputs": { "width": 1024, "height": 1024, "batch_size": 1 }
+  },
+  "2": {
+    "class_type": "KSampler",
+    "_meta": { "title": "采样器" },
+    "inputs": {
+      "model": ["3", 0],
+      "positive": ["5", 0],
+      "negative": ["6", 0],
+      "latent_image": ["11", 0],
+      "seed": 0,
+      "steps": 16,
+      "cfg": 2.5,
+      "sampler_name": "res_multistep",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "_meta": { "title": "VAE解码" },
+    "inputs": { "samples": ["2", 0], "vae": ["7", 0] }
+  },
+  "10": {
+    "class_type": "SaveImage",
+    "_meta": { "title": "保存图像" },
+    "inputs": { "images": ["8", 0], "filename_prefix": "batch" }
+  }
+}
